@@ -1,7 +1,7 @@
 # advanced-ggplot2-gganimate
 eco-data-sci workshop (January 2019) - advanced data viz in ggplot2 + gganimate
 
-# Advanced Data Visualization (ggplot2)
+# Data viz with ggplot2 and gganimate
 eco-data-sci workshop (January 2019) 
 
 [eco-data-sci.github.io](eco-data-sci.github.io)
