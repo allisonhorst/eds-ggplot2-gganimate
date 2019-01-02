@@ -6,16 +6,18 @@ eco-data-sci workshop (January 2019)
 
 [eco-data-sci.github.io](eco-data-sci.github.io)
 
-<img src="https://github.com/allisonhorst/advanced-dataviz/blob/master/ggplot_draw.jpeg" width="500">
+![gganimate_fireworks_small](gganimate_fireworks_small.png)
 
-We'll use examples to explore some (slightly) advanced skills in ggplot2 with gganimate. 
+We'll use examples to learn some basics of gganimate with ggplot2, + a few gg-extras. 
 
 Includes:
 
 - Animated point plots
-- Animated bubble plots
-- Animated ridge plots (with ggridges)
-
+- Animated line plots
+- Animated column graphs
+- Animated ridge plots
+- Repulsive text labels
+- Easy level highlighting
 
 ## Required packages: 
 
