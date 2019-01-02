@@ -6,7 +6,7 @@ eco-data-sci workshop (January 2019)
 
 [eco-data-sci.github.io](eco-data-sci.github.io)
 
-![gganimate_fireworks_small](gganimate_fireworks_small.png)
+![gganimate_fireworks_small](gganimate_fireworks_small.png | width = 100)
 
 We'll use examples to learn some basics of gganimate with ggplot2, + a few gg-extras. 
 
