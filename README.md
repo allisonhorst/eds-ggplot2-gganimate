@@ -1,8 +1,5 @@
-# advanced-ggplot2-gganimate
-eco-data-sci workshop (January 2019) - advanced data viz in ggplot2 + gganimate
-
-# Data viz with ggplot2 and gganimate
-eco-data-sci workshop (January 2019) 
+# Animated graphics: intro to ggplot2 with gganimate
+eco-data-sci workshop (January 2019)
 
 [eco-data-sci.github.io](eco-data-sci.github.io)
 
@@ -15,9 +12,9 @@ Includes:
 - Animated point plots
 - Animated line plots
 - Animated column graphs
-- Animated ridge plots
-- Repulsive text labels
-- Easy level highlighting
+- Animated ridge plots (ggplot2 + ggridges + gganimate)
+- Repulsive text labels (geom_text_repel)
+- Easy level highlighting (gghighlight)
 
 ## Required packages: 
 
@@ -26,6 +23,7 @@ Includes:
 - ggimage (optional, but fun...)
 - gganimate
 - ggrepel
+- gghighlight
 
 Install ggimage + gganimate development versions from github:
 
