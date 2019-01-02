@@ -1,0 +1,273 @@
+---
+title: "ggplot2 with gganimate"
+subtitle: "Eco-Data-Science (January 2019)"
+author: "Allison Horst"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+In this workshop, we'll practice some skills for creating animated graphics with ggplot2 and gganimate...plus some other cool things. 
+
+Visit and fork the workshop repo on github for information and data (<https://github.com/allisonhorst/advanced-ggplot2-gganimate>). 
+
+Packages required:
+
+- tidyverse
+- gganimate
+- ggrepel
+- gghighlight
+- ggridges
+
+You'll need to get the development version of gganimate:
+
+```r
+# install.packages('devtools')
+devtools::install_github('thomasp85/gganimate')
+```
+
+###An overview of gganimate terms
+
+gganimate is a new (and evolving) package for intuitive graphics animation by Thomas Lin Pedersen. 
+Some important terms to get us started: 
+
+- **state:** a 'phase' that you could plot statically, but you want to create transitions between for different phases (years, species, countries, etc.) - these might be things that you would otherwise consider plotting in different facets. So make sure that you can plot these statically FIRST, then add transitions! 
+
+- **transition:** How you want to shift from one state to another visually. These include things like: Will there be interpolation between states or frames? Ask yourself: does having a motion transition between things make sense? Would you put a line between them on a graph? 
+
+- **tweening:** Interpolation between states to determine pathway function. Default is linear...but we can change that to make it a little more fun. Also keep in mind that this doesn't always make sense! 
+
+- **ease_aes:** Visually update the 'look' of transitions **between states** by setting a function. Elastic is a pretty fun one. Check display_ease() from tweenr to see options for in/out functions for tweening interpolation. Note that you can add 'in' or 'out' separately, or 'in-out' for symmetric function at interpolation endpoints. 
+
+- **enter and exit:** How will things enter and exit **WITHIN STATES** at the beginning and end (fade, etc.)? Better to tween between discrete groups (vs. transition connected)
+
+###My three pieces of advice for getting started (from a gganimate beginner)
+
+- Make a static version first, ensuring that you can see all of your different states separately (and successfully), possibly using facet_wrap or facet_grid. Then...
+
+- Start simply, then build animation pieces.
+
+- Don't do it just because you *can*, do it because it's helps create an engaging visual that is scientifically sound *AND* benefits audience understanding *AND* looks awesome. 
+
+```{r}
+library(tidyverse)
+library(gganimate)
+library(ggrepel)
+library(gghighlight)
+```
+
+###1. Getting started: Channel Island Fox population on Santa Rosa Island
+
+a. Data (ci_fox_pop.csv): Friends of the Island Fox (<http://www1.islandfox.org/2014/>)
+
+```{r}
+
+# Get data:
+ci_fox_pop <- read_csv("ci_fox_pop.csv")
+
+# Look at it:
+View(ci_fox_pop)
+
+# Gather it:
+fox <- ci_fox_pop %>% 
+  gather(island, pop, san_miguel:san_nicolas)
+
+# Make a static plot frst! 
+ggplot(fox, aes(x = year, y = pop)) +
+  geom_point(size = 3, aes(color = island)) +
+  theme_dark() +
+  scale_colour_manual(values = c("white", "yellow","orange","magenta", "aquamarine","olivedrab1")) +
+  labs(x = "Year", y = "Fox Population", title = "Channel Island Fox Recovery") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,2000)) +
+  scale_x_continuous(expand = c(0,0), limits = c(1994, 2016)) +
+  facet_wrap(~year)# yes, this makes no sense - but this is what we want. All of the different states are plotting separately. That's good! We're going to combine them using gganimate transitions. 
+```
+
+b. Now let's made an animated version using gganimate functions: 
+
+```{r, warning = FALSE}
+# Make an animated version (remove facet_wrap, instead add animation) - 30 seconds
+
+# Fun fact while rendering (Wikipedia): R was created by Ross Ihaka and Robert Gentleman at the University of Auckland, New Zealand, R is named partly after the first names of the first two R authors and partly as a play on the name of S. The project was conceived in 1992, with an initial version released in 1995 and a stable beta version in 2000.
+
+ggplot(fox, aes(x = year, y = pop)) +
+  geom_point(size = 3, aes(color = island)) +
+  theme_dark() +
+  scale_colour_manual(values = c("white", "yellow","orange","magenta", "aquamarine","olivedrab1")) +
+  labs(x = "Year", y = "Fox Population", title = "Channel Island Fox Recovery") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,2000)) +
+  scale_x_continuous(expand = c(0,0), limits = c(1994, 2016)) +
+  transition_states(states = year, transition_length = 1, state_length = 1, wrap = FALSE)
+```
+
+
+c. Changing functions (ease_aes) between states, and adding a wake:
+
+A fun thing to explore while rendering: <https://easings.net/>
+
+```{r, warning = FALSE}
+
+ggplot(fox, aes(x = year, y = pop)) +
+  geom_point(size = 3, aes(color = island)) +
+  theme_dark() +
+  scale_colour_manual(values = c("white", "yellow","orange","magenta", "aquamarine","olivedrab1")) +
+  labs(x = "Year", y = "Fox Population", title = "Channel Island Fox Recovery") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,2000)) +
+  scale_x_continuous(expand = c(0,0), limits = c(1994, 2016)) +
+  transition_states(states = year, transition_length = 1, state_length = 1, wrap = FALSE) +
+  ease_aes('cubic-in-out') +
+  shadow_wake(wake_length = 0.2) 
+
+```
+
+d. shadow_wake for point permanence
+
+```{r, warning = FALSE}
+# Also try shadow_mark to leave a point:
+
+ggplot(fox, aes(x = year, y = pop)) +
+  geom_point(size = 3, aes(color = island)) +
+  theme_dark() +
+  scale_colour_manual(values = c("white", "yellow","orange","magenta", "aquamarine","olivedrab1")) +
+  labs(x = "Year", y = "Fox Population", title = "Channel Island Fox Recovery") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,2000)) +
+  scale_x_continuous(expand = c(0,0), limits = c(1994, 2016)) +
+  transition_states(states = year, transition_length = 1, state_length = 1, wrap = FALSE) +
+  ease_aes('cubic-in-out') +
+  shadow_mark()
+```
+
+e. A line graph with transition_reveal():
+
+```{r, warning = FALSE}
+# And now with a line graph (transition_reveal):
+
+ggplot(fox, aes(x = year, y = pop)) +
+  geom_line(size = 1, aes(color = island)) +
+  theme_dark() +
+  scale_colour_manual(values = c("white", "yellow","orange","magenta", "aquamarine","olivedrab1")) +
+  labs(x = "Year", y = "Fox Population", title = "Channel Island Fox Recovery") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,2000)) +
+  scale_x_continuous(expand = c(0,0), limits = c(1994, 2016)) +
+  transition_reveal(id = island, along = year) + # really wants two things...
+  ease_aes('quadratic-in-out')
+
+```
+
+f. Adding labels
+
+```{r, warning = FALSE}
+
+ggplot(fox, aes(x = year, y = pop, group = island)) +
+  geom_line(size = 1, aes(color = island)) +
+  geom_text(aes(label = island), nudge_x = 3, color = "white") +
+  theme_dark() +
+  scale_colour_manual(values = c("white", "yellow","orange","magenta", "aquamarine","olivedrab1")) +
+  labs(x = "Year", y = "Fox Population", title = "Channel Island Fox Recovery") +
+  scale_y_continuous(expand = c(0,0), limits = c(0,2000)) +
+  scale_x_continuous(expand = c(0,0), limits = c(1994, 2016)) +
+  transition_reveal(id = island, along = year) + # really wants two things...
+  ease_aes('quadratic-in-out')
+
+```
+
+###2. An animation break: ggrepel and gghighlight with Star Wars characters
+
+a. The 'starwars' dataset exists in dplyr (part of the tidvyerse), with data from the Star Wars API (<https://swapi.co/>). First, look at the data.  
+
+```{r}
+View(starwars)
+```
+
+c. Filter to only include data for species: human, droid, wookiee, ewok. Relevel species with forcats' fct_relevel
+
+```{r}
+sw <- starwars %>% 
+  filter(species == "Human" | species == "Droid" | species == "Wookiee" | species == "Ewok") %>% 
+  mutate(species = factor(species))
+
+sw$species <- fct_relevel(sw$species, "Ewok","Droid","Human","Wookiee")
+```
+
+d. Remember the first step I recommend for gganimate: make a static version first, with different states (in this case, species) separated using facet_wrap: 
+
+Another thing included here:
+geom_text_repel (from ggrepel) - for "repulsive textual annotations" (seriously, see the documentation with ?geom_text_repel)
+
+```{r}
+
+# Static version: 
+
+ggplot(sw, aes(x = height, y = mass, label = name)) +
+  geom_point(aes(color = species)) + 
+  geom_text_repel(size = 2, segment.color = "gray60", segment.size = 0.2) +
+  scale_color_manual(values = c("orange","navyblue","magenta","forestgreen")) +
+  theme_bw()# Yeah, looks bad but this is what we want! 
+
+```
+
+e. Now that the static version is working, make an animated version using gganimate tools
+
+Discrete frames: no interpolation between values from frame to frame
+Use transition_manual(frames = ??)
+
+```{r, warning = FALSE}
+# Animated version (copied from above, minus facet_wrap): 
+
+sw_graph <- ggplot(sw, aes(x = height, y = mass, label = name)) +
+  geom_point(aes(color = species), size = 3) + 
+  geom_text_repel(size = 3, segment.color = "gray60", segment.size = 0.2) + 
+  scale_color_manual(values = c("orange","navyblue","magenta","forestgreen")) +
+  theme_bw() +
+  transition_manual(frames = species) # No tweening! That makes sense if you don't have a logical path between states. 
+
+sw_graph
+
+# Rendering so you can send this to all your friends:
+# animate(sw_graph, nframes = 4, renderer = gifski_renderer("sw_graph.gif"))
+
+```
+
+But sometimes we have data where interpolating (tweening) between states *does* make sense, for example with time series data where the same factor levels exist in each state. Let's consider another example: 
+
+###4. Tweening with chick weights! 
+
+The dataset 'ChickWeight' exists in base R. Use ?ChickWeight for more information. 
+
+```{r, warning = FALSE}
+
+# Animated column plot:
+
+ggplot(ChickWeight, aes(x = Chick, y = weight)) +
+  geom_col(aes(fill = Diet)) +
+  labs(title = "Age (days): {closest_state}") +
+  scale_fill_manual(values = c("yellow","orange","coral","magenta")) +
+  scale_y_continuous(expand = c(0,0)) +
+  theme_dark() +
+  transition_states(Time, transition_length = 3, state_length = 1)
+
+
+```
+
+```{r, warning = FALSE}
+
+# Find mean weight by time for each feed type
+mean_wt <- ChickWeight %>% 
+  group_by(Diet, Time) %>% 
+  summarize(
+    mean_wt = mean(weight)
+  )
+
+ggplot(mean_wt, aes(x = Time, y = mean_wt, label = Diet)) +
+  geom_line(aes(color = Diet)) +
+  geom_text(nudge_x = 0.2, nudge_y = 5) +
+  theme_light() +
+  scale_color_manual(values = c("dodgerblue","green3","purple","orange")) +
+  transition_reveal(Diet, Time)
+```
+
+
+
+
