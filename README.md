@@ -3,11 +3,12 @@ eco-data-sci workshop (January 2019)
 
 [eco-data-sci.github.io](eco-data-sci.github.io)
 
+In this eco-data-sci session, we'll use simple examples to refresh ggplot2 skills, learn some basics of gganimate with ggplot2, and explore a few useful gg-extras. 
+
 ![gganimate_fireworks_small](gganimate_fireworks_small.png)
 
-We'll use examples to learn some basics of gganimate with ggplot2, + a few gg-extras. 
 
-Includes:
+Examples include:
 
 - Animated point plots
 - Animated line plots
