@@ -23,8 +23,9 @@ Includes:
 - ggridges 
 - ggimage (optional, but fun...)
 - gganimate
+- ggrepel
 
-Install the last two (ggimage + gganimate) development versions from github:
+Install ggimage + gganimate development versions from github:
 
 ```r
 setRepositories(ind=1:2)
