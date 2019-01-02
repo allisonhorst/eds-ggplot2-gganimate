@@ -40,6 +40,10 @@ devtools::install_github('thomasp85/gganimate')
 
 ## Data: 
 
+### Channel Island Fox population data (ci_fox_pop.csv)
+
+Friends of the Channel Island Fox: <http://www1.islandfox.org/p/materials.html>
+
 ### Star Wars API ('starwars' in dplyr)
 
 This data comes from SWAPI, the Star Wars API (<http://swapi.co/>), and exists in dplyr as 'starwars'. More infomration: <https://dplyr.tidyverse.org/reference/starwars.html>
