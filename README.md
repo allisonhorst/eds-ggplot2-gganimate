@@ -8,20 +8,18 @@ eco-data-sci workshop (January 2019)
 
 <img src="https://github.com/allisonhorst/advanced-dataviz/blob/master/ggplot_draw.jpeg" width="500">
 
-We'll use examples to explore some advanced tools for data visualization in ggplot2. 
+We'll use examples to explore some (slightly) advanced skills in ggplot2 with gganimate. 
 
 Includes:
 
-- bubble plots (warm-up: adding layers and changing aesthetics by factor groups)
-- divergence graphs (lollipop, bar, point)
-- ggplot + lubridate (time series)
-- ridge plots (with ggridges)
-- animated graphics (with gganimate)
+- Animated point plots
+- Animated bubble plots
+- Animated ridge plots (with ggridges)
+
 
 ## Required packages: 
 
 - ggplot2
-- lubridate
 - ggridges 
 - ggimage (optional, but fun...)
 - gganimate
