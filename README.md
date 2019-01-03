@@ -32,7 +32,7 @@ In this eco-data-sci session, we'll use simple examples to refresh ggplot2 skill
 Install gganimate development version from github:
 
 ```r
-# install.packages('devtools')
+install.packages('devtools')
 devtools::install_github('thomasp85/gganimate')
 ```
 
