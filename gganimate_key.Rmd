@@ -1,5 +1,5 @@
 ---
-title: "ggplot2 with gganimate"
+title: "Intro to ggplot2 with gganimate"
 subtitle: "Eco-Data-Science (January 2019)"
 author: "Allison Horst"
 output: html_document
@@ -10,6 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 In this workshop, we'll practice some skills for creating animated graphics with ggplot2 and gganimate...plus some other cool things. 
+
+Note: We won't be doing *all* of these examples separately in the workshop, but additional examples are here for you to explore. 
 
 Visit and fork the workshop repo on github for information and data (<https://github.com/allisonhorst/advanced-ggplot2-gganimate>). 
 
@@ -56,6 +58,7 @@ library(tidyverse)
 library(gganimate)
 library(ggrepel)
 library(gghighlight)
+library(ggridges)
 ```
 
 ###1. Getting started: Channel Island Fox population on Santa Rosa Island
@@ -85,12 +88,14 @@ ggplot(fox, aes(x = year, y = pop)) +
   facet_wrap(~year)# yes, this makes no sense - but this is what we want. All of the different states are plotting separately. That's good! We're going to combine them using gganimate transitions. 
 ```
 
-b. Now let's made an animated version using gganimate functions: 
+b. Now let's made an animated version using transition_states:
+
+From: <https://rdrr.io/github/dgrtwo/gganimate/man/transition_states.html>:
+"[transition_states] splits your data into multiple states based on the levels in a given column, much like ggplot2::facet_wrap() splits up the data in multiple panels. It then tweens (interpolates) between the defined states and pauses at each state." 
 
 ```{r, warning = FALSE}
-# Make an animated version (remove facet_wrap, instead add animation) - 30 seconds
 
-# Fun fact while rendering (Wikipedia): R was created by Ross Ihaka and Robert Gentleman at the University of Auckland, New Zealand, R is named partly after the first names of the first two R authors and partly as a play on the name of S. The project was conceived in 1992, with an initial version released in 1995 and a stable beta version in 2000.
+# Make an animated version (remove facet_wrap, instead add animation) - 30 seconds
 
 ggplot(fox, aes(x = year, y = pop)) +
   geom_point(size = 3, aes(color = island)) +
@@ -100,10 +105,10 @@ ggplot(fox, aes(x = year, y = pop)) +
   scale_y_continuous(expand = c(0,0), limits = c(0,2000)) +
   scale_x_continuous(expand = c(0,0), limits = c(1994, 2016)) +
   transition_states(states = year, transition_length = 1, state_length = 1, wrap = FALSE)
+
 ```
 
-
-c. Changing functions (ease_aes) between states, and adding a wake:
+c. Changing ease functions (ease_aes) between states, and adding a shadow_wake
 
 A fun thing to explore while rendering: <https://easings.net/>
 
@@ -122,7 +127,7 @@ ggplot(fox, aes(x = year, y = pop)) +
 
 ```
 
-d. shadow_wake for point permanence
+d. Use shadow_mark to leave previous frame points behind!
 
 ```{r, warning = FALSE}
 # Also try shadow_mark to leave a point:
@@ -139,7 +144,9 @@ ggplot(fox, aes(x = year, y = pop)) +
   shadow_mark()
 ```
 
-e. A line graph with transition_reveal():
+e. Create an animated line graph of fox populations with transition_reveal():
+
+From Thomas Lin Pedersen (<https://github.com/thomasp85/gganimate/wiki/Temperature-time-series>): "We use transition_reveal() to allow the lines to gradually be build up. transition_reveal() knows to only keep old data for path and polygon type layers which means that our segment, point, and text layers only appears as single data points in each frame."
 
 ```{r, warning = FALSE}
 # And now with a line graph (transition_reveal):
@@ -156,24 +163,27 @@ ggplot(fox, aes(x = year, y = pop)) +
 
 ```
 
-f. Adding labels
+f. Add labels to the animated line graph of fox populations
 
 ```{r, warning = FALSE}
 
 ggplot(fox, aes(x = year, y = pop, group = island)) +
   geom_line(size = 1, aes(color = island)) +
-  geom_text(aes(label = island), nudge_x = 3, color = "white") +
+  geom_segment(aes(xend = 2016, yend = pop), linetype = 2, colour = 'grey') + 
+  geom_label(aes(x = 2016.5, label = island, fill = island), hjust = 0, color = "black") + 
   theme_dark() +
-  scale_colour_manual(values = c("white", "yellow","orange","magenta", "aquamarine","olivedrab1")) +
-  labs(x = "Year", y = "Fox Population", title = "Channel Island Fox Recovery") +
+  theme(legend.position = "none") +
+  scale_color_manual(values = c("white", "yellow","orange","magenta", "aquamarine","olivedrab1")) +
+  scale_fill_manual(values = c("white", "yellow","orange","magenta", "aquamarine","olivedrab1")) +
+  labs(x = "Year", y = "Fox Population", title = "Channel Island Fox Recovery\nYear: {frame_along}") +
   scale_y_continuous(expand = c(0,0), limits = c(0,2000)) +
-  scale_x_continuous(expand = c(0,0), limits = c(1994, 2016)) +
+  scale_x_continuous(expand = c(0,0), limits = c(1994, 2022)) +
   transition_reveal(id = island, along = year) + # really wants two things...
   ease_aes('quadratic-in-out')
 
 ```
 
-###2. An animation break: ggrepel and gghighlight with Star Wars characters
+###2. Star Wars characters: transition_manual, transition_layers
 
 a. The 'starwars' dataset exists in dplyr (part of the tidvyerse), with data from the Star Wars API (<https://swapi.co/>). First, look at the data.  
 
@@ -208,20 +218,21 @@ ggplot(sw, aes(x = height, y = mass, label = name)) +
 
 ```
 
-e. Now that the static version is working, make an animated version using gganimate tools
+e. Now that the static version is working, make an animated version using transition_manual
 
-Discrete frames: no interpolation between values from frame to frame
-Use transition_manual(frames = ??)
+From <https://rdrr.io/github/dgrtwo/gganimate/man/transition_manual.html>:
+"[transition_manual] allows you to map a variable in your data to a specific frame in the animation. No tweening of data will be made and the number of frames in the animation will be decided by the number of levels in the frame variable."
 
 ```{r, warning = FALSE}
 # Animated version (copied from above, minus facet_wrap): 
 
 sw_graph <- ggplot(sw, aes(x = height, y = mass, label = name)) +
   geom_point(aes(color = species), size = 3) + 
+  labs(title = "Species: {current_frame}") +
   geom_text_repel(size = 3, segment.color = "gray60", segment.size = 0.2) + 
   scale_color_manual(values = c("orange","navyblue","magenta","forestgreen")) +
   theme_bw() +
-  transition_manual(frames = species) # No tweening! That makes sense if you don't have a logical path between states. 
+  transition_manual(frames = species) # No tweening! That makes sense if you don't have a logical path between states. Just want discrete frames that follow each other. Note: There is an argument 'cumulative = TRUE' that seems to be under development with some issues in newer versions...check back later to see if working. 
 
 sw_graph
 
@@ -229,6 +240,29 @@ sw_graph
 # animate(sw_graph, nframes = 4, renderer = gifski_renderer("sw_graph.gif"))
 
 ```
+
+f. Use transition_layers to animate geoms on top of each other
+
+From gganimate documentation: "[transition_layers] gradually adds layers to the plot in the order they have been defined. By default prior layers are kept for the remainder of the animation, but they can also be set to be removed as the next layer enters."
+
+Try using different enter_ options to change how the layers appear (e.g. enter_fade()). *Note*: exit_ options also exist, but since the layers are NOT exiting, it's NA here. 
+
+```{r}
+
+ggplot(sw, aes(x = height, y = mass, label = name)) +
+  geom_point(color = "gray50", size = 4) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", lty = 5, size = 0.5) +
+  geom_smooth(method = "lm", se = TRUE, color = "NA") +
+  scale_color_manual(values = c("orange","navyblue","magenta","forestgreen")) +
+  theme_bw() +
+  transition_layers(layer_length = 1, transition_length = 2) +
+  enter_fade()
+
+```
+
+g. An transition_layers example with previous layers NOT retained (and exit_ updated)
+
+
 
 But sometimes we have data where interpolating (tweening) between states *does* make sense, for example with time series data where the same factor levels exist in each state. Let's consider another example: 
 
@@ -267,7 +301,5 @@ ggplot(mean_wt, aes(x = Time, y = mean_wt, label = Diet)) +
   scale_color_manual(values = c("dodgerblue","green3","purple","orange")) +
   transition_reveal(Diet, Time)
 ```
-
-
 
 
