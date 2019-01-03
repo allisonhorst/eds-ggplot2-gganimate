@@ -1,5 +1,6 @@
 # Animated graphics: intro to ggplot2 with gganimate
-eco-data-sci workshop (January 2019)
+Eco-Data-Science session (UCSB Collaboratory, Jan-15-2019)
+Prepared by Allison Horst
 
 [Click here to join eco-data-sci!](https://eco-data-science.github.io/)
 
