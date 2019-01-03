@@ -1,10 +1,10 @@
 # Animated graphics: intro to ggplot2 with gganimate
 
-Eco-Data-Science session (UCSB Collaboratory, January 15<sup>th</sup>, 2019)
+[Eco-Data-Science](https://eco-data-science.github.io/) session (UCSB Collaboratory, January 15<sup>th</sup>, 2019)
 
 Prepared by Allison Horst
 
-[Click here to join eco-data-sci!](https://eco-data-science.github.io/)
+
 
 In this eco-data-sci session, we'll use simple examples to refresh ggplot2 skills, learn some basics of gganimate with ggplot2, and explore a few other useful ggplot tools. 
 
