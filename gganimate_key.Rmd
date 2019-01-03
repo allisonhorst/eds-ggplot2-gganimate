@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-In this workshop, we'll practice some skills for creating animated graphics with ggplot2 and gganimate...plus some other cool things. 
+In this workshop, we'll practice some skills for creating animated graphics with ggplot2 and gganimate, plus some other cool things. 
 
 *Note: We won't be doing all of these examples in the workshop, but they're  here for you to explore.* 
 
