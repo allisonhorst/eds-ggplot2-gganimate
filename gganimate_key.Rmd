@@ -293,15 +293,20 @@ Animated abalone ridge plot with density plots separated by sex:
 
 abalone <- read_csv("abalone.csv") %>% 
   filter(sex == "M" | sex == "F" | sex == "I") %>% 
-  filter(age_years > 4 & age_years < 25)
+  filter(age_years > 4 & age_years < 25) %>% 
+  mutate(sex = fct_relevel(as.factor(sex), "I","F","M"))
 
-ggplot(abalone, aes(x = length_mm, y = age_years, fill = sex, color = sex)) +
-  geom_density_ridges(alpha = 0.5) +
-  scale_fill_manual(values = c("purple","navy","aquamarine")) +
-  scale_color_manual(values = c("purple","navy","aquamarine")) + theme_minimal() +
+ab_graph <- ggplot(abalone, aes(x = length_mm, y = age_years, fill = sex)) +
+  geom_density_ridges(alpha = 0.5, color = "white") +
+  scale_fill_manual(values = c("purple","blue","cyan")) +
+  theme_minimal() +
   labs(x = "Shell Length (mm)", y = "Abalone Age (years)") +
   transition_states(age_years, transition_length = 1, state_length = 1) +
   shadow_mark()
+
+ab_graph
+
+# animate(ab_graph, nframes = 100, renderer = gifski_renderer("ab_graph.gif"))
 
 ```
 
