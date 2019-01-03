@@ -8,7 +8,7 @@ In this eco-data-sci session, we'll use simple examples to refresh ggplot2 skill
 
 Included:
 
-- Animated point plots
+- Animated scatterplots
 - Animated line plots
 - Animated ridge plots (ggplot2 + ggridges + gganimate)
 - Easing + tweening options (ease_aes and enter/exit)
