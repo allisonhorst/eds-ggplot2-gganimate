@@ -1,41 +1,36 @@
 # Animated graphics: intro to ggplot2 with gganimate
-eco-data-sci workshop (January 2019)
 
-[eco-data-sci.github.io](eco-data-sci.github.io)
+Eco-Data-Science session (UCSB Collaboratory, January 15<sup>th</sup>, 2019)
 
-In this eco-data-sci session, we'll use simple examples to refresh ggplot2 skills, learn some basics of gganimate with ggplot2, and explore a few useful gg-extras. 
+Prepared by Allison Horst
+
+[Click here to join eco-data-sci!](https://eco-data-science.github.io/)
+
+In this eco-data-sci session, we'll use simple examples to refresh ggplot2 skills, learn some basics of gganimate with ggplot2, and explore a few other useful ggplot tools. 
 
 ![gganimate_fireworks_small](gganimate_fireworks_small.png)
 
+### Included:
 
-Examples include:
-
-- Animated point plots
+- Animated scatterplots
 - Animated line plots
-- Animated column graphs
 - Animated ridge plots (ggplot2 + ggridges + gganimate)
+- Easing + tweening options (ease_aes and enter/exit)
+- 4 transition types: transition_states, transition_layers, transition_manual, transition_reveal
 - Repulsive text labels (geom_text_repel)
-- Easy level highlighting (gghighlight)
 
-## Required packages: 
 
-- ggplot2
+### Required packages: 
+
+- tidyverse
 - ggridges 
-- ggimage (optional, but fun...)
 - gganimate
 - ggrepel
-- gghighlight
 
-Install ggimage + gganimate development versions from github:
-
-```r
-setRepositories(ind=1:2)
-## install.packages("devtools")
-devtools::install_github("GuangchuangYu/ggimage")
-```
+Install gganimate development version from github:
 
 ```r
-# install.packages('devtools')
+install.packages('devtools')
 devtools::install_github('thomasp85/gganimate')
 ```
 
@@ -47,9 +42,8 @@ Friends of the Channel Island Fox: <http://www1.islandfox.org/p/materials.html>
 
 ### Star Wars API ('starwars' in dplyr)
 
-This data comes from SWAPI, the Star Wars API (<http://swapi.co/>), and exists in dplyr as 'starwars'. More information: <https://dplyr.tidyverse.org/reference/starwars.html>
-
-https://dplyr.tidyverse.org/reference/starwars.html
+This data comes from SWAPI, the Star Wars API (<http://swapi.co/>), and exists in dplyr as 'starwars'. 
+More information: <https://dplyr.tidyverse.org/reference/starwars.html>
 
 ### Abalone physiology and rings data (abalone.csv): 
 
@@ -61,4 +55,5 @@ Original Owners of Database:
 Marine Resources Division
 Marine Research Laboratories - Taroona
 Department of Primary Industry and Fisheries, Tasmania
+
 
