@@ -8,7 +8,6 @@ Prepared by Allison Horst
 
 In this eco-data-sci session, we'll use simple examples to refresh ggplot2 skills, learn some basics of gganimate with ggplot2, and explore a few other useful ggplot tools. 
 
-![gganimate_fireworks_small](gganimate_fireworks_small.png)
 
 ### Included:
 
@@ -56,4 +55,4 @@ Marine Resources Division
 Marine Research Laboratories - Taroona
 Department of Primary Industry and Fisheries, Tasmania
 
-
+![gganimate_fireworks_small](gganimate_fireworks_small.png)
