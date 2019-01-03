@@ -5,13 +5,12 @@ eco-data-sci workshop (January 2019)
 
 In this eco-data-sci session, we'll use simple examples to refresh ggplot2 skills, learn some basics of gganimate with ggplot2, and explore a few useful gg-extras. 
 
-![gganimate_fireworks_small](gganimate_fireworks_small.png)
 
 Included:
 
 - Animated point plots
 - Animated line plots
-- Animated column graphs- Animated ridge plots (ggplot2 + ggridges + gganimate)
+- Animated ridge plots (ggplot2 + ggridges + gganimate)
 - Easing + tweening options (ease_aes and enter/exit)
 - 4 transition types: transition_states, transition_layers, transition_manual, transition_reveal
 - Repulsive text labels (geom_text_repel)
@@ -19,12 +18,12 @@ Included:
 
 ## Required packages: 
 
-- ggplot2
+- tidyverse
 - ggridges 
 - gganimate
 - ggrepel
 
-Install gganimate development versions from github:
+Install gganimate development version from github:
 
 ```r
 # install.packages('devtools')
@@ -53,3 +52,5 @@ Marine Resources Division
 Marine Research Laboratories - Taroona
 Department of Primary Industry and Fisheries, Tasmania
 
+
+![gganimate_fireworks_small](gganimate_fireworks_small.png)
