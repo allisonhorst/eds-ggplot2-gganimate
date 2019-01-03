@@ -5,34 +5,27 @@ eco-data-sci workshop (January 2019)
 
 In this eco-data-sci session, we'll use simple examples to refresh ggplot2 skills, learn some basics of gganimate with ggplot2, and explore a few useful gg-extras. 
 
-![gganimate_fireworks_small](gganimate_fireworks_small.png)
+![gganimate_fireworks_small](gganimate_fireworks_small.png = 500x200)
 
 
-Examples include:
+Included:
 
 - Animated point plots
 - Animated line plots
-- Animated column graphs
-- Animated ridge plots (ggplot2 + ggridges + gganimate)
+- Animated column graphs- Animated ridge plots (ggplot2 + ggridges + gganimate)
+- Easing + tweening options (ease_aes and enter/exit)
+- 4 transition types: transition_states, transition_layers, transition_manual, transition_reveal
 - Repulsive text labels (geom_text_repel)
-- Easy level highlighting (gghighlight)
+
 
 ## Required packages: 
 
 - ggplot2
 - ggridges 
-- ggimage (optional, but fun...)
 - gganimate
 - ggrepel
-- gghighlight
 
-Install ggimage + gganimate development versions from github:
-
-```r
-setRepositories(ind=1:2)
-## install.packages("devtools")
-devtools::install_github("GuangchuangYu/ggimage")
-```
+Install gganimate development versions from github:
 
 ```r
 # install.packages('devtools')
