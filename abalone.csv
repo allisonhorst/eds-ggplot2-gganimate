@@ -1,5 +1,5 @@
-sex,length,length_mm,diameter,diameter_mm,height,height_mm,whole_weight,whole_weight_g,rings,age_years
-M,0.455,,0.365,36.5,0.095,19,0.514,102.8,15,16.5
+sex,length_standardized,length_mm,diameter_standardized,diameter_mm,height_standardized,height_mm,whole_weight_standardized,whole_weight_g,no_rings,age_years
+M,0.455,91,0.365,36.5,0.095,19,0.514,102.8,15,16.5
 M,0.35,70,0.265,26.5,0.09,18,0.2255,45.1,7,8.5
 F,0.53,106,0.42,42,0.135,27,0.677,135.4,9,10.5
 M,0.44,88,0.365,36.5,0.125,25,0.516,103.2,10,11.5

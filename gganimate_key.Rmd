@@ -20,7 +20,6 @@ Packages required:
 - tidyverse
 - gganimate
 - ggrepel
-- gghighlight
 - ggridges
 
 You'll need to get the development version of gganimate:
@@ -57,7 +56,6 @@ Some important terms to get us started:
 library(tidyverse)
 library(gganimate)
 library(ggrepel)
-library(gghighlight)
 library(ggridges)
 ```
 
@@ -183,7 +181,7 @@ ggplot(fox, aes(x = year, y = pop, group = island)) +
 
 ```
 
-###2. Star Wars characters: transition_manual, transition_layers
+###2. Star Wars characters: transition_manual, transition_layers, ggrepel, rendering gifs to send to all your friends and family
 
 a. The 'starwars' dataset exists in dplyr (part of the tidvyerse), with data from the Star Wars API (<https://swapi.co/>). First, look at the data.  
 
@@ -206,7 +204,7 @@ d. Remember the first step I recommend for gganimate: make a static version firs
 Another thing included here:
 geom_text_repel (from ggrepel) - for "repulsive textual annotations" (seriously, see the documentation with ?geom_text_repel)
 
-```{r}
+```{r, warning = FALSE}
 
 # Static version: 
 
@@ -245,9 +243,9 @@ f. Use transition_layers to animate geoms on top of each other
 
 From gganimate documentation: "[transition_layers] gradually adds layers to the plot in the order they have been defined. By default prior layers are kept for the remainder of the animation, but they can also be set to be removed as the next layer enters."
 
-Try using different enter_ options to change how the layers appear (e.g. enter_fade()). *Note*: exit_ options also exist, but since the layers are NOT exiting, it's NA here. 
+Try using different enter_ options to change how the layers appear (e.g. enter_fade()). *Note*: exit_ options also exist, but since the layers are NOT exiting, it's NA here. See the second example for an exit_ example. 
 
-```{r}
+```{r, warning = FALSE}
 
 ggplot(sw, aes(x = height, y = mass, label = name)) +
   geom_point(color = "gray50", size = 4) +
@@ -260,15 +258,83 @@ ggplot(sw, aes(x = height, y = mass, label = name)) +
 
 ```
 
-g. An transition_layers example with previous layers NOT retained (and exit_ updated)
+g. An transition_layers example with previous layers NOT retained (and exit_ updated) - here, height by planet (Tatooine or Naboo) ignoring all other variables
 
 
+```{r, warning = FALSE}
 
-But sometimes we have data where interpolating (tweening) between states *does* make sense, for example with time series data where the same factor levels exist in each state. Let's consider another example: 
+sw_planets <- starwars %>% 
+  filter(homeworld == "Tatooine" | homeworld == "Naboo")
 
-###4. Tweening with chick weights! 
+ggplot(sw_planets, aes(x = homeworld, y = height)) +
+  geom_boxplot(aes(fill = homeworld)) +
+  geom_jitter(aes(color = homeworld), width = 0.1) +
+  geom_violin(aes(color = homeworld, fill = homeworld)) +
+  theme_bw() +
+  transition_layers(layer_length = 1, transition_length = 2, keep_layers = FALSE) +
+  enter_fade() +
+  exit_fade()
 
-The dataset 'ChickWeight' exists in base R. Use ?ChickWeight for more information. 
+```
+
+###3. Abalone + ridge plots + transition_states (Joy Division meets action figures)
+
+Data: Accessed from UCI Machine Learning Repository (<https://archive.ics.uci.edu/ml/datasets/abalone>)
+
+Warwick J Nash, Tracy L Sellers, Simon R Talbot, Andrew J Cawthorn and Wes B Ford (1994), "The Population Biology of Abalone (Haliotis species) in Tasmania. I. Blacklip Abalone (H. rubra) from the North Coast and Islands of Bass Strait", Sea Fisheries Division, Technical Report No. 48 (ISSN 1034-3288)
+
+Relevant info: 
+sex = M (Male), F (Female), I (Infant/Indeterminate)
+length_mm = longest shell dimension (mm)
+age = estimated age (years), calculated by # rings + 1.5
+
+Animated abalone ridge plot with density plots separated by sex: 
+```{r, warning = FALSE}
+
+abalone <- read_csv("abalone.csv") %>% 
+  filter(sex == "M" | sex == "F" | sex == "I") %>% 
+  filter(age_years > 4 & age_years < 25)
+
+ggplot(abalone, aes(x = length_mm, y = age_years, fill = sex, color = sex)) +
+  geom_density_ridges(alpha = 0.5) +
+  scale_fill_manual(values = c("purple","navy","aquamarine")) +
+  scale_color_manual(values = c("purple","navy","aquamarine")) + theme_minimal() +
+  labs(x = "Shell Length (mm)", y = "Abalone Age (years)") +
+  transition_states(age_years, transition_length = 1, state_length = 1) +
+  shadow_mark()
+
+```
+
+### A few more random examples
+
+```{r, warning = FALSE}
+
+ggplot(abalone, aes(x = length_mm, y = diameter_mm)) +
+  geom_point(aes(color = age_years, size = height_mm)) +
+  labs(title = "Abalone age: {closest_state} years", x = "Length (") +
+  theme_dark()+
+  scale_color_gradientn(colors = c("magenta","orange","yellow","white")) +
+  transition_states(age_years, transition_length = 1, state_length = 2) +
+  enter_fade()+
+  exit_fade() +
+  shadow_mark()
+```
+
+And another abalone example...
+```{r, warning = FALSE}
+# Another one: 
+
+ggplot(abalone, aes(x = age_years, y = diameter_mm)) +
+  geom_point(aes(size = length_mm, color = diameter_mm)) +
+  scale_color_gradient(low = "magenta", high = "yellow") +
+  theme_dark()+
+  transition_states(age_years, transition_length = 2, state_length = 3) +
+  shadow_mark() +
+  enter_fade() +
+  ease_aes('back-in')
+```
+
+The following examples use dataset 'ChickWeight' in base R. Use ?ChickWeight for more information. 
 
 ```{r, warning = FALSE}
 
@@ -282,7 +348,6 @@ ggplot(ChickWeight, aes(x = Chick, y = weight)) +
   theme_dark() +
   transition_states(Time, transition_length = 3, state_length = 1)
 
-
 ```
 
 ```{r, warning = FALSE}
@@ -293,6 +358,8 @@ mean_wt <- ChickWeight %>%
   summarize(
     mean_wt = mean(weight)
   )
+
+# Animated line plot
 
 ggplot(mean_wt, aes(x = Time, y = mean_wt, label = Diet)) +
   geom_line(aes(color = Diet)) +
