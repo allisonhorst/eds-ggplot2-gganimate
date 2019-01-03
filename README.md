@@ -47,9 +47,8 @@ Friends of the Channel Island Fox: <http://www1.islandfox.org/p/materials.html>
 
 ### Star Wars API ('starwars' in dplyr)
 
-This data comes from SWAPI, the Star Wars API (<http://swapi.co/>), and exists in dplyr as 'starwars'. More information: <https://dplyr.tidyverse.org/reference/starwars.html>
-
-https://dplyr.tidyverse.org/reference/starwars.html
+This data comes from SWAPI, the Star Wars API (<http://swapi.co/>), and exists in dplyr as 'starwars'. 
+More information: <https://dplyr.tidyverse.org/reference/starwars.html>
 
 ### Abalone physiology and rings data (abalone.csv): 
 
